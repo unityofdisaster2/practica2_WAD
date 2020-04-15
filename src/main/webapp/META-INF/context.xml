@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context antiJARLocking="true" path="/Practica2_EscuelaJSP">
+
+    <ResourceLink name="jdbc/Practica2"
+        global="jdbc/Practica2"
+        type="javax.sql.DataSource"
+    />    
+    
+        
+</Context>
+
+
+
+
+
+
+
+
