@@ -6,6 +6,7 @@
 package com.ipn.mx.DAO;
 
 import com.ipn.mx.DTO.CarreraDTO;
+import com.ipn.mx.utilerias.Grafica;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -30,7 +31,7 @@ public class CarreraDAO {
     private static final String SQL_DELETE = "{CALL borrar_carrera(?)}";
     private static final String SQL_SELECT = "{CALL obtener_una_carrera(?)}";
     private static final String SQL_SELECT_ALL = "{CALL obtener_carreras()}";
-    // private static final String SQL_GRAFICAS ="{CALL spDatosGrafica()}";
+    private static final String SQL_GRAFICAS ="{CALL spDatosGraficaCarrera()}";
 
     private Connection con;
 
@@ -74,7 +75,7 @@ public class CarreraDAO {
             
         }finally{
             if(cs != null){ cs.close(); }
-            if(con != null){ cs.close(); }
+            if(con != null){ con.close(); }
         }
     }
 
@@ -88,7 +89,7 @@ public class CarreraDAO {
             
         }finally{
             if(cs != null){ cs.close(); }
-            if(con != null){ cs.close(); }
+            if(con != null){ con.close(); }
         }
     }
 
@@ -105,7 +106,7 @@ public class CarreraDAO {
             
         }finally{
             if(cs != null){ cs.close(); }
-            if(con != null){ cs.close(); }
+            if(con != null){ con.close(); }
         }
     }
 
@@ -126,7 +127,7 @@ public class CarreraDAO {
         }finally{
             if( rs != null) rs.close();
             if(cs != null){ cs.close(); }
-            if(con != null){ cs.close(); }
+            if(con != null){ con.close(); }
         }
     }
 
@@ -136,6 +137,7 @@ public class CarreraDAO {
         ResultSet rs = null;
         try{
             cs = con.prepareCall(SQL_SELECT);
+            cs.setInt(1, dto.getEntidad().getIdCarrera());
             rs = cs.executeQuery();
             List resultados = obtenerResultados(rs);
             if(resultados.size() > 0){
@@ -146,7 +148,7 @@ public class CarreraDAO {
         }finally{
             if( rs != null) rs.close();
             if(cs != null){ cs.close(); }
-            if(con != null){ cs.close(); }
+            if(con != null){ con.close(); }
         }
     }
 
@@ -163,6 +165,29 @@ public class CarreraDAO {
         }
         return resultados;
     }
+
+    public List graficar() throws SQLException{
+        obtenerConexion();
+        CallableStatement cs = null;
+        ResultSet rs = null;
+        List lista = new ArrayList();
+        try{
+            cs = con.prepareCall(SQL_GRAFICAS);
+            rs = cs.executeQuery();
+            while(rs.next()){
+                Grafica grafica = new Grafica();
+                grafica.setCantidad(Integer.parseInt(rs.getString("alumnos")));
+                grafica.setNombre(rs.getString("carrera"));
+                lista.add(grafica);
+            }
+        }finally{
+            if( rs != null) rs.close();
+            if(cs != null){ cs.close(); }
+            if(con != null){ con.close(); }            
+        }
+        return lista;
+    }
+
     
     
     

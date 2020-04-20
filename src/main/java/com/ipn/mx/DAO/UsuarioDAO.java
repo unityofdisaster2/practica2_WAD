@@ -6,8 +6,12 @@
 package com.ipn.mx.DAO;
 
 import com.ipn.mx.DTO.UsuarioDTO;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.sql.Blob;
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -22,6 +26,7 @@ import java.util.logging.Logger;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
 /**
@@ -229,20 +234,48 @@ public class UsuarioDAO {
             dto.getEntidad().setPaterno(rs.getString("paterno"));
             dto.getEntidad().setMaterno(rs.getString("materno"));
             dto.getEntidad().setEmail(rs.getString("email"));
-            
-            // verificar si el campo de la imagen es nulo
-            Object imagen = rs.getObject("imagen");
-            if(imagen != null){
-                dto.getEntidad().setImagen(((Blob)imagen).getBinaryStream());
-            }else{
-                dto.getEntidad().setImagen(null);
-            }
+            dto.getEntidad().setImagen(rs.getBlob("imagen").getBinaryStream());
             dto.getEntidad().setNombreUsuario(rs.getString("nombreUsuario"));
             dto.getEntidad().setClaveUsuario(rs.getString("claveUsuario"));
             lista.add(dto);
         }
         return lista;
     }
+
+
+    public void mostrarImagen(int id, HttpServletResponse response) throws SQLException, IOException{
+        obtenerConexion();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        InputStream is = null;
+        OutputStream os = null;
+        BufferedInputStream bis = null;
+        BufferedOutputStream bos = null;
+        response.setContentType("image/*");
+        try{
+            os = response.getOutputStream();
+            ps = con.prepareStatement(SQL_SELECT_ONE);
+            ps.setInt(1, id);
+            rs = ps.executeQuery();
+            if(rs.next()){
+                is = rs.getBinaryStream("imagen"); 
+            }
+            bis = new BufferedInputStream(is);
+            bos = new BufferedOutputStream(os);
+            int  i = 0;
+            while((i = bis.read()) != -1 ){
+                bos.write(i);
+            }
+            
+        }finally{
+            if(rs != null ){rs.close();}
+            if(ps != null ){ps.close();}
+            if(con != null){con.close();}
+            
+            
+        }
+    }
+
     
     
 }

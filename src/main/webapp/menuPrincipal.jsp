@@ -10,7 +10,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Menu Principal</title>
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
         <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.4/dist/semantic.min.css">
         <script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.4/dist/semantic.min.js"></script> 
@@ -58,17 +58,17 @@
                                     <i class="home icon"></i>
                                     Home
                                 </a>
-                                <a class="item active">
+                                <a class="item" href="UsuarioServlet?accion=listaDeUsuarios">
                                     <i class="user icon"></i>
                                     Lista de usuarios
                                 </a>
 
-                                <a class="item">
+                                <a class="item" href="CarreraServlet?accion=listaDeCarreras">
                                     <i class="list alternate outline icon"></i>
                                     Lista de carreras
                                 </a>
 
-                                <a class="item">
+                                <a class="item" href="AlumnoServlet?accion=listaDeAlumnos">
                                     <i class="list alternate icon"></i>
                                     Lista de alumnos
                                 </a>
@@ -102,17 +102,17 @@
                             <i class="home icon"></i>
                             Home
                         </a>
-                        <a class="item active">
+                        <a class="item active" href="UsuarioServlet?accion=listaDeUsuarios">
                             <i class="user icon"></i>
                             Lista de usuarios
                         </a>
 
-                        <a class="item">
+                        <a class="item" href="CarreraServlet?accion=listaDeCarreras">
                             <i class="list alternate outline icon"></i>
                             Lista de carreras
                         </a>
 
-                        <a class="item">
+                        <a class="item" href="AlumnoServlet?accion=listaDeAlumnos">
                             <i class="list alternate icon"></i>
                             Lista de alumnos
                         </a>
@@ -135,21 +135,13 @@
                         <div id="content" class="ui container">
                             <div class="ui center aligned two column grid">
 
-                                <div class="ui segments">
-                                    <div class="ui center aligned segment">
-                                        <h1>Bienvenido: ${nombreUsuario}</h1>
-                                    </div>
-                                    <div class="ui secondary segment">
-                                        <img class="ui small image" src="imgs/default-user.png"/>
-                                    </div>
-                                </div>
 
                             </div>
                         </div>
                     </div>
                 </c:when>
                 <c:otherwise>
-                    <% response.sendRedirect("index.jsp");%>
+                    <% response.sendRedirect(request.getServletContext().getContextPath()+ "/index.jsp");%>
                 </c:otherwise>
             </c:choose>
     </body>
